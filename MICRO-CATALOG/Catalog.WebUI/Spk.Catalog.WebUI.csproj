@@ -27,10 +27,9 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />  
-    <PackageReference Include="NSwag.AspNetCore" Version="13.1.2" />  
-    <PackageReference Include="NSwag.Core" Version="13.1.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.0" />
-    <PackageReference Include="NSwag.MSBuild" Version="13.1.2">
+    <PackageReference Include="NSwag.AspNetCore" Version="13.3.0" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -46,6 +45,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Catalog.Infrastructure\Spk.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\Catalog.Persistence\Spk.Catalog.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="app.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">

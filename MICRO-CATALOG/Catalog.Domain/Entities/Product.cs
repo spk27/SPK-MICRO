@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Spk.Catalog.Domain.Common;
 
 namespace Spk.Catalog.Domain.Entities {
     public class Product : AuditableEntity {
 
+        public Product()
+        {
+            ProductCategories = new HashSet<ProductCategory>();
+        }
         public long ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -26,6 +31,8 @@ namespace Spk.Catalog.Domain.Entities {
         public DateTime? AvailableStartDateTimeUtc { get; set; }
         public DateTime? AvailableEndDateTimeUtc { get; set; }
         public int Viewed { get; set; }
+
+        public ICollection<ProductCategory> ProductCategories { get; private set; }
 
     }
 }

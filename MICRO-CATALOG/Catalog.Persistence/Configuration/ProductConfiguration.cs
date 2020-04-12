@@ -20,7 +20,7 @@ namespace Spk.Catalog.Persistence.Configurations
 
             builder.Property(p => p.Price)
                 .IsRequired()
-                .HasDefaultValue(0)
+                .HasDefaultValue(0m)
                 .HasColumnType("decimal(12,3)");
         }
     }

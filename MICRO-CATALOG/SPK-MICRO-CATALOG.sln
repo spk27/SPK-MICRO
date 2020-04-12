@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spk.Catalog.Persistence", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spk.Catalog.Infrastructure", "Catalog.Infrastructure\Spk.Catalog.Infrastructure.csproj", "{AF6788AF-D7D2-4528-AF87-155BD178A803}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spk.Catalog.WebUI", "Catalog.WebUI\Spk.Catalog.WebUI.csproj", "{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +74,17 @@ Global
 		{AF6788AF-D7D2-4528-AF87-155BD178A803}.Release|x64.Build.0 = Release|Any CPU
 		{AF6788AF-D7D2-4528-AF87-155BD178A803}.Release|x86.ActiveCfg = Release|Any CPU
 		{AF6788AF-D7D2-4528-AF87-155BD178A803}.Release|x86.Build.0 = Release|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Debug|x64.Build.0 = Debug|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Debug|x86.Build.0 = Debug|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Release|x64.ActiveCfg = Release|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Release|x64.Build.0 = Release|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Release|x86.ActiveCfg = Release|Any CPU
+		{A61F7E51-5F10-4E0B-9B5B-64A6AEB6CE84}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
