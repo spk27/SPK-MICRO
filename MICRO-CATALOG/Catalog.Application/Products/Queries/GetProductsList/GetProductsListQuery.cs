@@ -23,6 +23,7 @@ namespace Spk.Catalog.Application.Products.Queries.GetProductsList {
             public async Task<ProductsListVM> Handle(GetProductsListQuery request, CancellationToken cancellationToken) {
 
                 var products = await _context.Products
+                    .Include(p => p.Medias)
                     .ProjectTo<ProductsListDTO>(_mapper.ConfigurationProvider)
                     .Take(10)
                     .ToListAsync(cancellationToken);

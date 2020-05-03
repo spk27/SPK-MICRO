@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Spk.Catalog.Application.Common.Mappings;
 using Spk.Catalog.Domain.Entities;
@@ -17,6 +18,7 @@ namespace Spk.Catalog.Application.Products.Queries.GetProductsList {
         public bool OnStock { get; set; }
         public bool IsNew { get; set; }
 
+        public ICollection<MediaListDTO> Medias { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -26,12 +28,12 @@ namespace Spk.Catalog.Application.Products.Queries.GetProductsList {
                     d => d.LowStock,
                     opt => opt.MapFrom(
                         s => s.StockQuantity <= s.MinStockQuantity && 0 < s.StockQuantity
-                    ))
+                ))
                 .ForMember(
                     d => d.IsNew,
                     opt => opt.MapFrom(
                         s => s.MarkAsNewStartDateTimeUtc <= DateTime.Now && DateTime.Now <= s.MarkAsNewEndDateTimeUtc
-                    ));
+                ));
         }
     }
 }

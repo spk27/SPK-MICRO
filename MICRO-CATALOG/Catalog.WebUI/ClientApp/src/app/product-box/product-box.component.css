@@ -1,0 +1,16 @@
+.productBox-Title {
+    text-decoration: solid;
+    font-size: 16px;
+}
+
+.productBox-Price {
+    text-decoration: solid;
+    font-size: 20px;
+  }
+
+.productBox-oldPrice {
+    text-decoration: line-through;
+    font-size: 12px;
+    color: gray;
+    vertical-align: bottom;
+}

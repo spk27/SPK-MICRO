@@ -25,7 +25,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {
@@ -51,8 +52,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "Auth.WebUI:build"
-          },
-          "configurations": {
+          }
+          ,"configurations": {
             "production": {
               "browserTarget": "Auth.WebUI:build:production"
             }

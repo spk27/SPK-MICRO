@@ -1,0 +1,49 @@
+<mat-card class="product-box"> 
+    <mat-card-content>
+        <mat-carousel
+            timings="250ms ease-in"
+            [autoplay]="true"
+            interval="5000"
+            color="accent"
+            maxWidth="auto"
+            proportion="75"
+            slides="5"
+            [loop]="true"
+            [hideArrows]="false"
+            [hideIndicators]="true"
+            [useKeyboard]="true"
+            [useMouseWheel]="false"
+            orientation="ltr"
+        >
+            <mat-carousel-slide
+                #matCarouselSlide
+                *ngFor="let media of product.medias; let i = index"
+                [image]="media.source"
+                overlayColor="#00000040"
+                [hideOverlay]="false"
+            ></mat-carousel-slide>
+        </mat-carousel>
+        <div class="container">
+            <div class="row">
+                <span class="productBox-Title">{{ product.name }}</span>
+            </div>
+            <div class="row justify-content-end align-items-end">
+                <span class="productBox-oldPrice">${{ product.oldPrice }}</span>
+                <span class="productBox-Price offset-1">${{ product.price }}</span>
+            </div>
+            <div class="row">
+                <bar-rating 
+                [(rate)]="rate" 
+                [max]="5" 
+                [readOnly]="true" 
+                [half]="true">
+            </bar-rating>
+                <!-- I WAS PUTTING THE RATTING STARTS COMPONENT HERE -->
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>See more</button>
+    </mat-card-actions>
+</mat-card>
+

@@ -19,16 +19,16 @@ namespace Spk.Catalog.Persistence.Configurations
             builder.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
             builder.HasOne(d => d.Product)
-                .WithMany(p => p.ProductCategories)
+                .WithMany(p => p.Categories)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ProductCategories_Products");
+                .HasConstraintName("FK_Products_Categories");
 
             builder.HasOne(d => d.Category)
-                .WithMany(p => p.ProductCategories)
+                .WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ProductCategories_Territories");
+                .HasConstraintName("FK_Categories_Products");
         }
     }
 }

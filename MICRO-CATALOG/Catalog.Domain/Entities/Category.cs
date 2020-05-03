@@ -7,11 +7,11 @@ namespace Spk.Catalog.Domain.Entities {
 
         public Category()
         {
-            ProductCategories = new HashSet<ProductCategory>();
+            Products = new HashSet<ProductCategory>();
         }
         public int CategoryId { get; set; }
         public string Name { get; set; }
 
-        public ICollection<ProductCategory> ProductCategories { get; private set; }
+        public ICollection<ProductCategory> Products { get; private set; }
     }
 }

@@ -15,6 +15,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IProductsClient {
+    getBasics(id: number): Observable<ProductBasicsVM>;
     getAll(): Observable<ProductsListVM>;
     create(command: UpsertProductCommand): Observable<number>;
 }
@@ -30,6 +31,57 @@ export class ProductsClient implements IProductsClient {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getBasics(id: number): Observable<ProductBasicsVM> {
+        let url_ = this.baseUrl + "/api/Products/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetBasics(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetBasics(<any>response_);
+                } catch (e) {
+                    return <Observable<ProductBasicsVM>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ProductBasicsVM>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetBasics(response: HttpResponseBase): Observable<ProductBasicsVM> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductBasicsVM.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ProductBasicsVM>(<any>null);
     }
 
     getAll(): Observable<ProductsListVM> {
@@ -133,6 +185,78 @@ export class ProductsClient implements IProductsClient {
     }
 }
 
+export class ProductBasicsVM implements IProductBasicsVM {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    price?: number | undefined;
+    oldPrice?: number | undefined;
+    newPrice?: number | undefined;
+    stockQuantity?: number;
+    lowStock?: boolean;
+    onStock?: boolean;
+    isNew?: boolean;
+
+    constructor(data?: IProductBasicsVM) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.price = _data["price"];
+            this.oldPrice = _data["oldPrice"];
+            this.newPrice = _data["newPrice"];
+            this.stockQuantity = _data["stockQuantity"];
+            this.lowStock = _data["lowStock"];
+            this.onStock = _data["onStock"];
+            this.isNew = _data["isNew"];
+        }
+    }
+
+    static fromJS(data: any): ProductBasicsVM {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductBasicsVM();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["price"] = this.price;
+        data["oldPrice"] = this.oldPrice;
+        data["newPrice"] = this.newPrice;
+        data["stockQuantity"] = this.stockQuantity;
+        data["lowStock"] = this.lowStock;
+        data["onStock"] = this.onStock;
+        data["isNew"] = this.isNew;
+        return data; 
+    }
+}
+
+export interface IProductBasicsVM {
+    id?: number;
+    name?: string | undefined;
+    description?: string | undefined;
+    price?: number | undefined;
+    oldPrice?: number | undefined;
+    newPrice?: number | undefined;
+    stockQuantity?: number;
+    lowStock?: boolean;
+    onStock?: boolean;
+    isNew?: boolean;
+}
+
 export class ProductsListVM implements IProductsListVM {
     products?: ProductsListDTO[] | undefined;
     count?: number;
@@ -192,6 +316,7 @@ export class ProductsListDTO implements IProductsListDTO {
     lowStock?: boolean;
     onStock?: boolean;
     isNew?: boolean;
+    medias?: MediaListDTO[] | undefined;
 
     constructor(data?: IProductsListDTO) {
         if (data) {
@@ -214,6 +339,11 @@ export class ProductsListDTO implements IProductsListDTO {
             this.lowStock = _data["lowStock"];
             this.onStock = _data["onStock"];
             this.isNew = _data["isNew"];
+            if (Array.isArray(_data["medias"])) {
+                this.medias = [] as any;
+                for (let item of _data["medias"])
+                    this.medias!.push(MediaListDTO.fromJS(item));
+            }
         }
     }
 
@@ -236,6 +366,11 @@ export class ProductsListDTO implements IProductsListDTO {
         data["lowStock"] = this.lowStock;
         data["onStock"] = this.onStock;
         data["isNew"] = this.isNew;
+        if (Array.isArray(this.medias)) {
+            data["medias"] = [];
+            for (let item of this.medias)
+                data["medias"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -251,6 +386,66 @@ export interface IProductsListDTO {
     lowStock?: boolean;
     onStock?: boolean;
     isNew?: boolean;
+    medias?: MediaListDTO[] | undefined;
+}
+
+export class MediaListDTO implements IMediaListDTO {
+    fileName?: string | undefined;
+    displayOrder?: number;
+    source?: string | undefined;
+    caption?: string | undefined;
+    mediaType?: MediaType;
+
+    constructor(data?: IMediaListDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.fileName = _data["fileName"];
+            this.displayOrder = _data["displayOrder"];
+            this.source = _data["source"];
+            this.caption = _data["caption"];
+            this.mediaType = _data["mediaType"];
+        }
+    }
+
+    static fromJS(data: any): MediaListDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new MediaListDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["fileName"] = this.fileName;
+        data["displayOrder"] = this.displayOrder;
+        data["source"] = this.source;
+        data["caption"] = this.caption;
+        data["mediaType"] = this.mediaType;
+        return data; 
+    }
+}
+
+export interface IMediaListDTO {
+    fileName?: string | undefined;
+    displayOrder?: number;
+    source?: string | undefined;
+    caption?: string | undefined;
+    mediaType?: MediaType;
+}
+
+export enum MediaType {
+    Image = 1,
+    File = 2,
+    Gif = 3,
+    Video = 4,
 }
 
 export class UpsertProductCommand implements IUpsertProductCommand {

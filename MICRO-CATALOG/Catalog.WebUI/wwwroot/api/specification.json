@@ -6,6 +6,38 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/api/Products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "Products_GetBasics",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductBasicsVM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Products": {
       "get": {
         "tags": [
@@ -60,6 +92,52 @@
   },
   "components": {
     "schemas": {
+      "ProductBasicsVM": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "oldPrice": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "newPrice": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "stockQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lowStock": {
+            "type": "boolean"
+          },
+          "onStock": {
+            "type": "boolean"
+          },
+          "isNew": {
+            "type": "boolean"
+          }
+        }
+      },
       "ProductsListVM": {
         "type": "object",
         "additionalProperties": false,
@@ -120,8 +198,56 @@
           },
           "isNew": {
             "type": "boolean"
+          },
+          "medias": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/MediaListDTO"
+            }
           }
         }
+      },
+      "MediaListDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "mediaType": {
+            "$ref": "#/components/schemas/MediaType"
+          }
+        }
+      },
+      "MediaType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Image",
+          "File",
+          "Gif",
+          "Video"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ]
       },
       "UpsertProductCommand": {
         "type": "object",
